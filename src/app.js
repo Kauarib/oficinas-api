@@ -4,7 +4,7 @@ import 'dotenv/config';
 
 import clientesRoutes from './routes/clientesRoutes.js';
 import veiculosRoutes from './routes/veiculosRoutes.js';
-/*import osRoutes from './routes/os.routes.js';*/
+import osRoutes from './routes/osRoutes.js';
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.get('/health', (req, res) => res.json({ ok: true }));
 
 app.use('/clientes', clientesRoutes);
 app.use('/veiculos', veiculosRoutes);
-/*app.use('/ordens-servico', osRoutes);*/
+app.use('/ordens-servico', osRoutes);
 
 export default app;
 
