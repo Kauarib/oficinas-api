@@ -28,7 +28,7 @@ oficinas-api/
 ⚙️ Configuração do Ambiente
 
 1️⃣ Clonar o repositório
-git clone https://github.com/seu-usuario/oficinas-api.git
+git clone https://github.com/Kauarib/oficinas-api
 cd oficinas-api
 
 2️⃣ Instalar dependências
