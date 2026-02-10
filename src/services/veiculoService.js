@@ -34,6 +34,17 @@ export async function buscarVeiculoPorId(id) {
   console.log("[service] rows.length =", rows.length);
   return rows[0] ?? null;
 }
+export async function buscarVeiculosPorCliente(clienteId) {
+    const [rows] = await pool.query(
+        `SELECT v.*, c.nome AS cliente_nome
+         FROM veiculos v
+         JOIN clientes c ON v.cliente_id = c.id
+         WHERE v.cliente_id = ?
+         ORDER BY v.id DESC`,
+        [clienteId]
+    );
+    return rows;
+}
 
 export async function criarVeiculo(data) {
     const { clienteId, marca, modelo, ano} = data;
@@ -49,7 +60,16 @@ export async function criarVeiculo(data) {
     return result.insertId;
 
 }
-
+export async function atualizarVeiculo(id, data) {
+    const { clienteId, marca, modelo, ano } = data;
+    const sql = `
+        UPDATE veiculos
+        SET cliente_id = ?, marca = ?, modelo = ?, ano = ?
+        WHERE id = ?
+    `;
+    const [result] = await pool.query(sql, [clienteId, marca ?? null, modelo ?? null, ano ?? null, id]);
+    return result.affectedRows > 0;
+}
 export async function deletarVeiculo(id) {
     const [result] = await pool.query('DELETE FROM veiculos WHERE id = ?', [id]);
     return result.affectedRows > 0;

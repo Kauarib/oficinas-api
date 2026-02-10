@@ -32,6 +32,12 @@ export async function buscarPorVeiculo(req, res) {
 
     
 }
+export async function buscarPorCliente(req, res) {
+  
+    const cliente_id = Number( req.params.id);
+    const os = await service.buscarOsporCliente(cliente_id);
+    res.json(os);
+}
 export async function criar(req, res) {
     const { veiculo_id, status } = req.body;
 
@@ -45,4 +51,32 @@ export async function criar(req, res) {
 
     const novo = await service.criarOs(req.body);
     return res.status(201).json(novo);
+}
+export async function atualizar(req, res) {
+    const id = Number(req.params.id);
+    const osExistente = await service.buscarOsporId(id);
+
+    if (!osExistente) {
+        return res.status(404).json({ message: 'Ordem de Serviço não encontrada' });
+    }
+
+    const { veiculo_id, status } = req.body;
+
+    if (status && !STATUS_VALIDOS.includes(status)) {
+        return res.status(400).json({ message: 'status inválido' });
+    }
+
+    const atualizado = await service.atualizarOs(id, req.body);
+    res.json(atualizado);
+}
+export async function remover(req, res) {
+    const id = Number(req.params.id);
+    const osExistente = await service.buscarOsporId(id);
+
+    if (!osExistente) {
+        return res.status(404).json({ message: 'Ordem de Serviço não encontrada' });
+    }
+
+    await service.removerOs(id);
+    res.status(204).send();
 }

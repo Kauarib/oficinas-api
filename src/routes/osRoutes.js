@@ -8,7 +8,9 @@ const router = Router();
 router.get('/', osController.listar);
 router.get('/:id', osController.buscar);
 router.get('/veiculo/:id', osController.buscarPorVeiculo);
+router.get('/cliente/:id', osController.buscarPorCliente);
+//router.put('/:id', osController.atualizar);
+//router.delete('/:id', osController.remover);
 
-router.post('/', osController.criar);
 
 export default router;

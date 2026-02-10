@@ -17,6 +17,18 @@ export async function buscarOsporVeiculo(veiculo_id) {
     );
     return rows[0] || null;
 }
+export async function buscarOsporCliente(cliente_id) {
+    const sql = `
+        SELECT os.*, v.marca, v.modelo, c.nome AS cliente_nome
+        FROM ordens_servico os
+        JOIN veiculos v ON os.veiculo_id = v.id
+        JOIN clientes c ON v.cliente_id = c.id
+        WHERE c.id = ?
+        ORDER BY os.id DESC`;
+
+    const [rows] = await pool.query(sql, [cliente_id]);
+    return rows;
+}
 export async function criarOs(data){
     const {veiculo_id,
         status = 'ABERTA', 
@@ -34,3 +46,23 @@ export async function criarOs(data){
     );
     return {id: result.insertId, ...data};
 }
+export async function atualizarOs(id, data) {
+    const {veiculo_id,
+        status, 
+        descricao_problema,
+        observacoes,
+        data_Saida, 
+        total_Produtos, 
+        total_Servicos, 
+        desconto, 
+        total_Geral} = data;
+    const [result] = await pool.query(
+        'UPDATE ordens_servico SET veiculo_id = ?, status = ?, descricao_problema = ?, observacoes = ?, data_saida = ?, total_produtos = ?, total_servicos = ?, desconto = ?, total_geral = ? WHERE id = ?',
+        [veiculo_id, status, descricao_problema, observacoes, data_Saida, total_Produtos, total_Servicos, desconto, total_Geral, id]
+    );
+    return result.affectedRows > 0; 
+}
+export async function deletarOs(id) {
+    const [result] = await pool.query('DELETE FROM ordens_servico WHERE id = ?', [id]);
+    return result.affectedRows > 0; 
+}   
