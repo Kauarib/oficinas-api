@@ -7,7 +7,7 @@ import { id } from 'zod/locales';
 function singToken(user){
     return jwt.sign(
         {sub: user.id, role: user.role, name: user.name},
-        process.env.JW_SECRET,
+        process.env.JWT_SECRET,
         {expiresIn: process.env.JWT_EXPIRES_IN}
     );
 }
